@@ -1,0 +1,1424 @@
+{
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        208,
+        672
+      ],
+      "id": "7f394066-46e9-4d66-9494-f54f3d621852",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "numberInputs": 4
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        880,
+        640
+      ],
+      "id": "cf33233e-a13d-49c1-b194-f52126ca6d66",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "url": "https://servis.idnes.cz/rss.aspx?c=pardubice",
+        "options": {}
+      },
+      "id": "0a08ff11-4240-47ab-bf17-738e61ae6b84",
+      "name": "RSS - iDNES Pardubice",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.1,
+      "position": [
+        432,
+        384
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "as-src-idnes",
+              "name": "source",
+              "value": "iDNES Pardubice",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "36305b38-8074-479e-a91a-d2f6a5b124c0",
+      "name": "Tag iDNES",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        656,
+        384
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "as-src-denik",
+              "name": "source",
+              "value": "Pardubický Deník",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "9cd6ce52-d3b6-4c46-b9c7-8b0a2998e17b",
+      "name": "Tag Deník",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        656,
+        576
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://pardubicky.denik.cz/rss/zpravy.html",
+        "options": {}
+      },
+      "id": "cae55f77-925b-444d-be93-6f2a47cd55e0",
+      "name": "RSS - Pardubický Deník",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.1,
+      "position": [
+        432,
+        576
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://pardubice.rozhlas.cz/rss/zpravy",
+        "options": {}
+      },
+      "id": "721d0395-884c-48d4-b446-1d17c46dd370",
+      "name": "RSS - ČRo Pardubice",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.1,
+      "position": [
+        432,
+        768
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "as-src-cro",
+              "name": "source",
+              "value": "Český rozhlas Pardubice",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "7c9bb13a-15bf-486d-9b0e-1d1fcf49c383",
+      "name": "Tag ČRo",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        656,
+        768
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "url": "https://pardubicezive.eu/feed/",
+        "options": {}
+      },
+      "id": "b479a296-665e-4090-b4c2-ee7d645fa30e",
+      "name": "RSS - Pardubice Živě",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.1,
+      "position": [
+        432,
+        960
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "as-src-zive",
+              "name": "source",
+              "value": "Pardubice Živě",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "52394b5f-dc63-4fce-b68c-dd2e5a934e57",
+      "name": "Tag Pardubice Živě",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        656,
+        960
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const ENTITIES = {\n  nove_vedeni: [\n    { name: 'Daniel Vondra', pattern: /\\b(vondr[ayueio]|vondrovi|vondrou)\\b/i, role: 'Náměstek (STAN) - školství, urbanismus' },\n    { name: 'Martin Slezák', pattern: /\\b(slezák[uae]?|slezákovi|slezákem|slezak)\\b/i, role: 'Náměstek (Progresivní Pardubice / TOP 09) - doprava, IT' },\n    { name: 'Jan Mazuch', pattern: /\\b(mazuch[aou]?|mazuchovi|mazuchem)\\b/i, role: 'Náměstek (ODS) - finance, rozpočet' },\n    { name: 'Kateřina Kosová', pattern: /\\b(kosov[áéou]|kosová)\\b/i, role: 'Náměstkyně (Naše Pardubice) - ŽP, zakázky' },\n    { name: 'Petr Netolický', pattern: /\\b(netolick[ýéhoémuým]|netolicky)\\b/i, role: 'Náměstek (KDU-ČSL) - majetek, kultura, soc. věci' },\n    { name: 'Filip Sedlák', pattern: /\\b(sedlák[uae]?|sedlákovi|sedlákem|sedlak)\\b/i, role: 'Starosta MO Pardubice I (Naše Pardubice)' },\n    { name: 'Dušan Stránský', pattern: /\\b(stránsk[ýéhoémuým]|stransky)\\b/i, role: 'Radní města (ODS)' },\n    { name: 'Jiří Hájek', pattern: /\\b(hájk[uae]|hájkovi|hájkem|hajek)\\b/i, role: 'Radní města (STAN)' },\n    { name: 'Šárka Kuchtová', pattern: /\\b(kuchtov[áéou]|kuchtova)\\b/i, role: 'Radní města (STAN)' },\n    { name: 'Bohdan Šeda', pattern: /\\b(šed[ayeou]|šedovi|bohdan[a]? šed[ay]?)\\b/i, role: 'Radní města (Naše Pardubice)' }\n  ],\n  stare_vedeni: [\n    { name: 'Jan Nadrchal', pattern: /\\b(nadrchal[aou]?|nadrchalovi|nadrchalem)\\b/i },\n    { name: 'Jiřina Klčová', pattern: /\\b(klčov[áéou]|klcova)\\b/i },\n    { name: 'Vít Hrabal', pattern: /\\b(hrabal[aou]?|hrabalovi|hrabalem)\\b/i },\n    { name: 'Jakub Rychtecký', pattern: /\\b(rychteck[ýéhoémuým]|rychtecky)\\b/i },\n    { name: 'Petr Kvaš', pattern: /\\b(kvaš[eaou]?|kvašovi|kvas)\\b/i },\n    { name: 'Alexandr Salfický', pattern: /\\b(salfick[ýéhoémuým]|salficky)\\b/i },\n    { name: 'Martin Charvát', pattern: /\\b(charvát[aou]?|charvat)\\b/i }\n  ],\n  kauzy_a_projekty: [\n    { tag: 'multifunkcni_arena', pattern: /\\b(arén[ayueio]|aren[ay]|hala v cihelně|dědk[ova]* arén[a]|ciheln[aě])\\b/i },\n    { tag: 'letni_stadion', pattern: /\\b(letní[ho]? stadion[u]?|cfig arén[ay]|stadion pod vinicí)\\b/i },\n    { tag: 'automaticke_mlyny', pattern: /\\b(automatick[éých]* mlýn[yů]|winternitz|gampa|gočár)\\b/i },\n    { tag: 'terminal_jih', pattern: /\\b(terminál[u]? jih|přednádraží|lávk[ay] přes labe|lávk[aou] k nádraží)\\b/i },\n    { tag: 'obchvaty_doprava', pattern: /\\b(severovýchodní obchvat|jihovýchodní obchvat|nadjezd kyjevská|podjezd 17\\. listopadu)\\b/i },\n    { tag: 'spalovna_rybitvi', pattern: /\\b(spalovn[ayueio]|rybitv[íi]|ave cz)\\b/i },\n    { tag: 'revize_obvodu', pattern: /\\b(reviz[ie] obvod[ůu]|rušení obvod[ůu]|městsk[éých] obvod[ůu]|obvodní radnic[ie])\\b/i }\n  ],\n  mestske_firmy: [\n    { tag: 'dpmp', pattern: /\\b(dpmp|dopravní[ho]? podnik[u]? města pardubic)\\b/i },\n    { tag: 'sluzby_mesta', pattern: /\\b(smp|služb[ay] města pardubic)\\b/i },\n    { tag: 'rozvojovy_fond', pattern: /\\b(rozvojov[ýého]* fond[u]?|rfp)\\b/i }\n  ]\n};\n\nfunction detectSource(url) {\n  if (url.includes('idnes.cz')) return 'iDNES Pardubice';\n  if (url.includes('denik.cz')) return 'Pardubický Deník';\n  if (url.includes('rozhlas.cz')) return 'Český rozhlas Pardubice';\n  if (url.includes('pardubicezive.eu')) return 'Pardubice Živě';\n  return 'Regionální zprávy';\n}\n\nconst seenUrls = new Set();\nconst results = [];\n\nfor (const item of $input.all()) {\n  const data = item.json;\n  const rawUrl = data.link || data.guid || '';\n  if (!rawUrl) continue;\n\n  let cleanUrl = rawUrl;\n  try {\n    const urlObj = new URL(rawUrl);\n    urlObj.searchParams.delete('utm_source');\n    urlObj.searchParams.delete('utm_medium');\n    urlObj.searchParams.delete('utm_campaign');\n    urlObj.searchParams.delete('utm_content');\n    cleanUrl = urlObj.origin + urlObj.pathname;\n  } catch (e) {\n    cleanUrl = rawUrl.split('?')[0];\n  }\n\n  if (seenUrls.has(cleanUrl)) continue;\n  seenUrls.add(cleanUrl);\n\n  const title = (data.title || '').trim();\n  const rawDesc = data.contentSnippet || data.content || data.description || '';\n  const cleanDesc = rawDesc.replace(/<[^>]*>?/gm, '').trim();\n  const searchableText = `${title} ${cleanDesc}`;\n\n  const matchedNewLeaders = [];\n  const matchedOldLeaders = [];\n  const matchedIssues = [];\n  const matchedCompanies = [];\n\n  for (const person of ENTITIES.nove_vedeni) {\n    if (person.pattern.test(searchableText)) {\n      matchedNewLeaders.push({ name: person.name, role: person.role });\n    }\n  }\n\n  for (const person of ENTITIES.stare_vedeni) {\n    if (person.pattern.test(searchableText)) {\n      matchedOldLeaders.push(person.name);\n    }\n  }\n\n  for (const issue of ENTITIES.kauzy_a_projekty) {\n    if (issue.pattern.test(searchableText)) {\n      matchedIssues.push(issue.tag);\n    }\n  }\n\n  for (const comp of ENTITIES.mestske_firmy) {\n    if (comp.pattern.test(searchableText)) {\n      matchedCompanies.push(comp.tag);\n    }\n  }\n\n  const isRelevant = (\n    matchedNewLeaders.length > 0 ||\n    matchedOldLeaders.length > 0 ||\n    matchedIssues.length > 0 ||\n    matchedCompanies.length > 0\n  );\n\n  results.push({\n    json: {\n      title,\n      link: cleanUrl,\n      source: detectSource(cleanUrl),\n      pubDate: data.pubDate || data.isoDate || new Date().toISOString(),\n      perex: cleanDesc.slice(0, 500),\n      isRelevant,\n      entities: {\n        newLeadership: matchedNewLeaders,\n        oldLeadership: matchedOldLeaders,\n        issues: matchedIssues,\n        companies: matchedCompanies\n      }\n    }\n  });\n}\n\nreturn results;"
+      },
+      "id": "e385c9eb-34da-4a82-86fd-a6eb1094e98b",
+      "name": "Pardubice Entity & Issue Tagger",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1104,
+        672
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cond-is-relevant",
+              "leftValue": "={{ $json.isRelevant }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "554561c1-2fe5-4f0a-bb44-7e5ff8a36607",
+      "name": "Filtr politické relevance",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        1328,
+        672
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "useCustomSchema": true,
+        "schema": "clankomat",
+        "tableId": "articles",
+        "returnAll": true,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "url",
+              "condition": "eq",
+              "keyValue": "={{ $json.link }}"
+            },
+            {
+              "keyName": "title",
+              "condition": "eq",
+              "keyValue": "={{ $json.title }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1536,
+        944
+      ],
+      "id": "5e76e081-73f6-4ef9-8cb8-223de6f87e11",
+      "name": "Get - kontrola na existující články",
+      "alwaysOutputData": false,
+      "credentials": {
+        "supabaseApi": {
+          "id": "fDVXdsWEFeMadoDE",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "useCustomSchema": true,
+        "schema": "clankomat",
+        "tableId": "articles",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "url",
+              "fieldValue": "={{ $json.link }}"
+            },
+            {
+              "fieldId": "title",
+              "fieldValue": "={{ $json.title }}"
+            },
+            {
+              "fieldId": "source",
+              "fieldValue": "={{ $json.source }}"
+            },
+            {
+              "fieldId": "perex",
+              "fieldValue": "={{ $json.perex }}"
+            },
+            {
+              "fieldId": "pub_date",
+              "fieldValue": "={{ $json.pubDate }}"
+            },
+            {
+              "fieldId": "entities",
+              "fieldValue": "={{ $json.entities }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2112,
+        848
+      ],
+      "id": "a3f6eff6-b24d-40c5-b4b7-c7804ec2ae3d",
+      "name": "Create a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "fDVXdsWEFeMadoDE",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "fieldsToMatchString": "title",
+        "joinMode": "keepNonMatches",
+        "outputDataFrom": "input2",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1840,
+        848
+      ],
+      "id": "78bb9d7e-6658-4fb9-b0f0-fb6a225df7ce",
+      "name": "Get new rows"
+    },
+    {
+      "parameters": {
+        "url": "=https://r.jina.ai/{{ $json.url }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          },
+          "timeout": 15000
+        }
+      },
+      "id": "6138b790-aeff-4d4c-801e-9e411a8a4e95",
+      "name": "Stáhnout plný text (Jina)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2432,
+        848
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "useCustomSchema": true,
+        "schema": "clankomat",
+        "tableId": "articles",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $('Create a row').item.json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "raw_content",
+              "fieldValue": "={{ ($json.data || $('Create a row').item.json.perex).slice(0, 12000) }}"
+            }
+          ]
+        }
+      },
+      "id": "42a72285-49e2-4c79-bebf-76f39cbfeeaa",
+      "name": "Supabase: Uložit plný text",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2656,
+        848
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "fDVXdsWEFeMadoDE",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "==Analyzuj tento nový článek a připrav opoziční podklady pro sociální sítě:\n\n- id: {{ $json.id }}\n- Titulek článku: {{ $('Create a row').item.json.title }}\n- Zdrojové médium: {{ $('Create a row').item.json.source }}\n- Odkaz: {{ $('Create a row').item.json.url }}\n- Datum vydání: {{ $('Create a row').item.json.pub_date }}\n- Automaticky detekované entity a kauzy v textu: {{ JSON.stringify($('Create a row').item.json.entities) }}\n\n- Plný text článku / Perex: \n{{ $('Supabase: Uložit plný text').item.json.raw_content || $('Create a row').item.json.perex }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "Jsi špičkový politický marketér, tiskový mluvčí a copywriter opozičního hnutí ANO v zastupitelstvu statutárního města Pardubice. \n\nTvým prvořadým úkolem je bedlivě sledovat kroky, tiskové zprávy, rozhodnutí a výroky nového vedení města (koalice složené ze stran: STAN, Progresivní Pardubice / TOP 09, ODS, Naše Pardubice a KDU-ČSL) a psát ostré, věcně podložené, srozumitelné a úderné opoziční příspěvky pro Facebook a Instagram.\n\n### PRAVIDLA PRO VYUŽITÍ NÁSTROJŮ (TOOLS):\n1. PŘED SEPSÁNÍm REAKCE VŽDY POUTŽIJ nástroj 'koalicni_sliby_a_vyroky' (vektorová DB) a vyhledej, co koalice nebo konkrétní politici slibovali v předvolebním programu, tiskových zprávách nebo dřívějších vyjádřeních k danému tématu.\n2. Pokud odhalíš rozpor mezi sliby a realitou (např. slibovali úspory, ale zakázka prodražuje; slibovali transparentnost, ale probíhá netransparentní výběrové řízení), UDĚLEJ Z TOHO HLAVNÍ ARGUMENTACI.\n3. Použij nástroj 'Supabase Tool (Historie článků)', pokud potřebuješ prověřit, zda se v minulosti o této kauze již psalo a jaký byl vývoj.\n\n### PRAVIDLA KOMUNIKACE A TÓNU:\n- Tón: Sebevědomý, konstruktivní, kritický, ale striktně věcný. Mluv jazykem, kterému běžný občan Pardubic rozumí. Žádné omáčky, jděte k podstatě problému.\n- Zákaz: Žádné osobní urážky, vulgarismy ani podpásovky. Kritizujeme rozhodnutí, nehospodárnost, aroganci moci a neplnění slibů, nikoliv lidi jako takové.\n- Adresnost politiků a gescí: Vždy, když se kauza týká konkrétní gesce, adresuj otázky přímo odpovědnému radnímu/náměstkovi:\n  * Daniel Vondra (STAN) – školství, urbanismus, architektura\n  * Martin Slezák (TOP 09) – doprava, územní plánování, IT, digitalizace, obvody\n  * Jan Mazuch (ODS) – finance, rozpočet, ekonomika, kapitálové společnosti\n  * Kateřina Kosová (Naše Pardubice) – životní prostředí, dotace, veřejné zakázky\n  * Petr Netolický (KDU-ČSL) – správa majetku, sociální věci, kultura\n  * Filip Sedlák (Naše Pardubice) – starosta MO Pardubice I\n\n### STRUKTURA VÝSTUPU:\nMusíš vrátit výstup přesně podle strukturovaného schématu (JSON), které obsahuje:\n- article_id: id článku v databázi\n- summary: Stručné shrnutí kauzy/události (1-2 věty).\n- angle: Hlavní opoziční úhel pohledu / politická argumentace.\n- headline: Úderný a chytlavý titulek příspěvku.\n- fb_post: Celý text pro Facebook (včetně odrážek, rozboru dopadů na občany a výzvy k diskuzi/Call to Action v komentářích).\n- ig_post: Dynamický, vizuálnější text pro Instagram včetně návrhu textu na grafický slide a 5–8 lokálních hashtagů (#pardubice #pardubickykraj #komunalnipolitika #mestopardubice ...).\n- image_prompt: Konkrétní a vizuálně silný popis grafiky nebo fotky, kterou má mediální tým k příspěvku připravit."
+        }
+      },
+      "id": "e3efdf4c-ae71-4538-b0ee-2a05f1a11e81",
+      "name": "AI Agent - ANO_Článkomat",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        2896,
+        848
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"article_id\": \"ID článku z databáze\",\n  \"title\": \"Titulek článku nebo příspěvku\",\n  \"summary\": \"Stručné shrnutí kauzy ve 2 větách\",\n  \"angle\": \"Hlavní opoziční argumentace\",\n  \"headline\": \"Úderný titulek příspěvku\",\n  \"fb_post\": \"Kompletní text příspěvku na Facebook\",\n  \"ig_post\": \"Kompletní text příspěvku na Instagram včetně hashtagů\",\n  \"image_prompt\": \"Konkrétní návrh vizuálu nebo fotky k příspěvku\"\n}"
+      },
+      "id": "d8fd488b-c61f-4627-b808-b2b03fdaeff1",
+      "name": "Structured Output Parser",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        3904,
+        1408
+      ]
+    },
+    {
+      "parameters": {
+        "useCustomSchema": true,
+        "schema": "clankomat",
+        "tableId": "draft_posts",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "article_id",
+              "fieldValue": "={{ $json.output.article_id }}"
+            },
+            {
+              "fieldId": "platform",
+              "fieldValue": "facebook"
+            },
+            {
+              "fieldId": "angle",
+              "fieldValue": "={{ $json.output.angle }}"
+            },
+            {
+              "fieldId": "headline",
+              "fieldValue": "={{ $json.output.headline }}"
+            },
+            {
+              "fieldId": "copy_text",
+              "fieldValue": "={{ $json.output.fb_post }}"
+            },
+            {
+              "fieldId": "image_prompt",
+              "fieldValue": "={{ $json.output.image_prompt }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "pending"
+            }
+          ]
+        }
+      },
+      "id": "a9336064-728a-4adc-880a-855b6af968ac",
+      "name": "Supabase: Uložit FB draft",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        5056,
+        720
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "fDVXdsWEFeMadoDE",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "useCustomSchema": true,
+        "schema": "clankomat",
+        "tableId": "draft_posts",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "article_id",
+              "fieldValue": "={{ $json.output.article_id }}"
+            },
+            {
+              "fieldId": "platform",
+              "fieldValue": "instagram"
+            },
+            {
+              "fieldId": "angle",
+              "fieldValue": "={{ $json.output.angle }}"
+            },
+            {
+              "fieldId": "headline",
+              "fieldValue": "={{ $json.output.headline }}"
+            },
+            {
+              "fieldId": "copy_text",
+              "fieldValue": "={{ $json.output.ig_post }}"
+            },
+            {
+              "fieldId": "image_prompt",
+              "fieldValue": "={{ $json.output.image_prompt }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "checked"
+            }
+          ]
+        }
+      },
+      "id": "8178fe6d-5d25-4e26-b974-a9ada3a26589",
+      "name": "Supabase: Uložit IG draft",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        5056,
+        912
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "fDVXdsWEFeMadoDE",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        2752,
+        1056
+      ],
+      "id": "7888cb9e-4155-488d-8c97-2adb7f9ea056",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "4CuWyZexB3tX3GEM",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "==ano_clankomat_{{ $now.format('yyyy-MM') }}",
+        "tableName": "clankomat.agent_memory",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.4,
+      "position": [
+        2912,
+        1072
+      ],
+      "id": "2d6d9f93-afca-4100-bcb2-b4fc74975460",
+      "name": "Postgres Chat Memory",
+      "credentials": {
+        "postgres": {
+          "id": "ZFWKmqduVFPbZwsr",
+          "name": "Supabase - direct Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "useCustomSchema": true,
+        "schema": "clankomat",
+        "tableId": "articles",
+        "orderBy": "pubDate.desc",
+        "filters": {
+          "conditions": []
+        }
+      },
+      "type": "n8n-nodes-base.supabaseTool",
+      "typeVersion": 1,
+      "position": [
+        3232,
+        1136
+      ],
+      "id": "2f5a0c45-5c95-411a-a395-3c73cfcd5d24",
+      "name": "Get many - články ze dneška",
+      "credentials": {
+        "supabaseApi": {
+          "id": "fDVXdsWEFeMadoDE",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        3184,
+        1632
+      ],
+      "id": "0628b3e7-62cb-414e-9e80-e41f8096d293",
+      "name": "Embeddings Google Gemini",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "4CuWyZexB3tX3GEM",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Work with data in supabase vetctor database and check the aligment of the text with coalition statemnets",
+        "tableName": {
+          "__rl": true,
+          "value": "rpc/match_coalition_statements",
+          "mode": "list",
+          "cachedResultName": "rpc/match_coalition_statements"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        3184,
+        1440
+      ],
+      "id": "449cfbc3-22ae-4d82-9b6c-8b647426db3c",
+      "name": "Clankomat coallition vector store",
+      "credentials": {
+        "supabaseApi": {
+          "id": "fDVXdsWEFeMadoDE",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "sendAndWait",
+        "guildId": {
+          "__rl": true,
+          "value": "1571906306682523699",
+          "mode": "list",
+          "cachedResultName": "ANO 2011 - Pardubice",
+          "cachedResultUrl": "https://discord.com/channels/1571906306682523699"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1571906465554497599",
+          "mode": "list",
+          "cachedResultName": "ai-agent-clanky",
+          "cachedResultUrl": "https://discord.com/channels/1571906306682523699/1571906465554497599"
+        },
+        "message": "===📢 **ANO Článkomat**\n\n**Titulek:** {{ $json.output.title || $('Create a row').item.json.title }}\n**AI Titulek:** {{ $json.output.headline }}\n\n**Facebook draft:** \n{{ $json.output.fb_post }}\n\n**Instagram draft:** \n{{ $json.output.ig_post }}\n\n\n\n*Odpovězte na tuto zprávu s případnými připomínkami, nebo reagujte schválením.*",
+        "approvalOptions": {
+          "values": {
+            "approvalType": "double"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        3376,
+        848
+      ],
+      "id": "cb581e8e-d876-432a-bfd5-e5646d9f9696",
+      "name": "Send message and wait for response",
+      "webhookId": "a98dd69a-2d9b-438b-852a-90b709244c8f",
+      "credentials": {
+        "discordBotApi": {
+          "id": "yH66f42gEoNsvbbx",
+          "name": "Discord bot - ANO 2011_Clankomat"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "q": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Search_Query__q_', ``, 'string') }}",
+        "additionalFields": {},
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-serpapi.serpApiTool",
+      "typeVersion": 1,
+      "position": [
+        3056,
+        1296
+      ],
+      "id": "f992740c-de76-471e-884f-341e1035d144",
+      "name": "Google search in SerpApi",
+      "credentials": {
+        "serpApi": {
+          "id": "gtiIvR13pT1PYcN0",
+          "name": "SerpApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "getAll",
+        "guildId": {
+          "__rl": true,
+          "value": "1571906306682523699",
+          "mode": "list",
+          "cachedResultName": "ANO 2011 - Pardubice",
+          "cachedResultUrl": "https://discord.com/channels/1571906306682523699"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1571906465554497599",
+          "mode": "list",
+          "cachedResultName": "ai-agent-clanky",
+          "cachedResultUrl": "https://discord.com/channels/1571906306682523699/1571906465554497599"
+        },
+        "limit": 1,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        4256,
+        1040
+      ],
+      "id": "3130e828-a7f6-4443-910e-6774f763d3ee",
+      "name": "Get zpětnou vazbu na článek",
+      "webhookId": "c3097741-acc0-49cc-ab5d-99223bff6769",
+      "credentials": {
+        "discordBotApi": {
+          "id": "yH66f42gEoNsvbbx",
+          "name": "Discord bot - ANO 2011_Clankomat"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        4640,
+        1296
+      ],
+      "id": "96b8ad02-dff0-424d-b0b9-7901b8b0adac",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "4CuWyZexB3tX3GEM",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "react",
+        "guildId": {
+          "__rl": true,
+          "value": "1571906306682523699",
+          "mode": "list",
+          "cachedResultName": "ANO 2011 - Pardubice",
+          "cachedResultUrl": "https://discord.com/channels/1571906306682523699"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1571906465554497599",
+          "mode": "list",
+          "cachedResultName": "ai-agent-clanky",
+          "cachedResultUrl": "https://discord.com/channels/1571906306682523699/1571906465554497599"
+        },
+        "messageId": "={{ $json.id }}",
+        "emoji": "👍"
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        4480,
+        1040
+      ],
+      "id": "1f0f22a1-5ccd-4a25-8b64-df58b39861a3",
+      "name": "React with an emoji to a message",
+      "webhookId": "1f2baa25-591f-4041-ab98-62566ecbdeb4",
+      "credentials": {
+        "discordBotApi": {
+          "id": "yH66f42gEoNsvbbx",
+          "name": "Discord bot - ANO 2011_Clankomat"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "==Zde je původní vygenerovaný návrh a požadavek na jeho úpravu od tiskového týmu. Uprav texty podle pokynů:\n\n- Původní uživatelská/týmová připomínka z Discordu (co je potřeba změnit): \n{{ $('Get zpětnou vazbu na článek').item.json.content }}\n\n- Původní JSON návrh od AI Agenta 1:\n{{ $('AI Agent - ANO_Článkomat').item.json.output }}\n\nZa každou cenu drž správné ID článku {{ $('AI Agent - ANO_Článkomat').item.json.output.article_id }}\nProveď požadované úpravy a vrať kompletní revidovaný JSON výstup.",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "Jsi špičkový politický editor, tiskový mluvčí a revizor tiskového oddělení opozičního hnutí ANO v zastupitelstvu statutárního města Pardubice. \n\nTvým úkolem je upravit a přepsat dříve vygenerované příspěvky na sociální sítě (Facebook a Instagram) na základě konkrétní lidské připomínky nebo zpětné vazby, kterou člen týmu poslal jako odpověď (reply) na Discordu.\n\n### PRAVIDLA PRO REVIZI:\n1. Pečlivě analyzuj původní text a požadavek uživatele (např. „napiš to ostřeji“, „zkrať to“, „vynech zmínku o dopravě“, „přidej výzvu k podpisu petice“).\n2. Aplikuj požadované změny tak, aby byla přesně naplněna vůle člověka, který revizi zadal.\n3. Zachovej politický kontext Pardubic, správné gesce politiků (Vondra – školství; Slezák – doprava; Mazuch – finance; Kosová – ŽP; Netolický – majetek/kultura; Sedlák – MO I) a konstruktivní, avšak nekompromisně opoziční tón hnutí ANO.\n4. Žádné osobní urážky ani vulgarismy.\n\n### STRUKTURA VÝSTUPU:\nMusíš vrátit výstup ve stejné strukturované JSON šabloně, jakou měl původní draft:\n- article_id: id článku v databázi\n- summary: Stručné shrnutí kauzy (případně aktualizované).\n- angle: Upravený opoziční úhel pohledu.\n- headline: Upravený, úderný titulek.\n- fb_post: Finálně upravený text pro Facebook.\n- ig_post: Finálně upravený text pro Instagram včetně hashtagů.\n- image_prompt: Upravený popis vizuálu/grafiky."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        4640,
+        1040
+      ],
+      "id": "a3872d15-27c8-4127-8e3b-8e4d0eb798d4",
+      "name": "Revizor"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "sendAndWait",
+        "guildId": {
+          "__rl": true,
+          "value": "1571906306682523699",
+          "mode": "list",
+          "cachedResultName": "ANO 2011 - Pardubice",
+          "cachedResultUrl": "https://discord.com/channels/1571906306682523699"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1571906465554497599",
+          "mode": "list",
+          "cachedResultName": "ai-agent-clanky",
+          "cachedResultUrl": "https://discord.com/channels/1571906306682523699/1571906465554497599"
+        },
+        "message": "===📢 **ANO Článkomat**\n\n**Titulek:** {{ $json.output.headline }}\n\n**Facebook draft:** \n{{ $json.output.fb_post }}\n\n**Instagram draft:** \n{{ $json.output.ig_post }}\n\n\n\n*Odpovězte na tuto zprávu s případnými připomínkami, nebo reagujte schválením.*",
+        "approvalOptions": {
+          "values": {
+            "approvalType": "double"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        3376,
+        1040
+      ],
+      "id": "6990bfd2-dd0d-4e36-8cae-2a444ce146bd",
+      "name": "Send message and wait po revizi",
+      "webhookId": "a98dd69a-2d9b-438b-852a-90b709244c8f",
+      "credentials": {
+        "discordBotApi": {
+          "id": "yH66f42gEoNsvbbx",
+          "name": "Discord bot - ANO 2011_Clankomat"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "6935a5ba-5146-4a98-9759-df3a3971b4fa",
+              "leftValue": "={{ $('Send message and wait for response').item.json.data.approved }}",
+              "rightValue": "=1",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.4,
+      "position": [
+        3792,
+        848
+      ],
+      "id": "1b1ee891-9071-49ef-bdb9-b7f753031b3e",
+      "name": "Je článek na revizi?"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "70029fca-be1e-4b3d-8ade-30a45a205401",
+              "leftValue": "={{ $json.data.approved }}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.4,
+      "position": [
+        3792,
+        1024
+      ],
+      "id": "bab8b74d-4717-4c8e-8fe4-e5da551db774",
+      "name": "IF - Revidovaný článek"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3dc8ee20-40a8-4310-af28-9679fe45af53",
+              "name": "output",
+              "value": "={{ $('Revizor').item.json.output }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        4368,
+        880
+      ],
+      "id": "34078bb4-ad25-41e7-a70a-ba8f53c48fa0",
+      "name": "Revidovaný článek"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c356b4fb-f5b1-4cf9-b4cd-312b0cc20087",
+              "name": "output",
+              "value": "={{ $('AI Agent - ANO_Článkomat').item.json.output }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        4368,
+        720
+      ],
+      "id": "a2825884-8d43-4ee7-b6cf-aa1ece7e8520",
+      "name": "Originálná článek"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "RSS - iDNES Pardubice",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "RSS - Pardubický Deník",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "RSS - ČRo Pardubice",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "RSS - Pardubice Živě",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Pardubice Entity & Issue Tagger",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS - iDNES Pardubice": {
+      "main": [
+        [
+          {
+            "node": "Tag iDNES",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tag iDNES": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tag Deník": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "RSS - Pardubický Deník": {
+      "main": [
+        [
+          {
+            "node": "Tag Deník",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS - ČRo Pardubice": {
+      "main": [
+        [
+          {
+            "node": "Tag ČRo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tag ČRo": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "RSS - Pardubice Živě": {
+      "main": [
+        [
+          {
+            "node": "Tag Pardubice Živě",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tag Pardubice Živě": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "Pardubice Entity & Issue Tagger": {
+      "main": [
+        [
+          {
+            "node": "Filtr politické relevance",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtr politické relevance": {
+      "main": [
+        [
+          {
+            "node": "Get - kontrola na existující články",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get new rows",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Get - kontrola na existující články": {
+      "main": [
+        [
+          {
+            "node": "Get new rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a row": {
+      "main": [
+        [
+          {
+            "node": "Stáhnout plný text (Jina)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get new rows": {
+      "main": [
+        [
+          {
+            "node": "Create a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Stáhnout plný text (Jina)": {
+      "main": [
+        [
+          {
+            "node": "Supabase: Uložit plný text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase: Uložit plný text": {
+      "main": [
+        [
+          {
+            "node": "AI Agent - ANO_Článkomat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent - ANO_Článkomat": {
+      "main": [
+        [
+          {
+            "node": "Send message and wait for response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent - ANO_Článkomat",
+            "type": "ai_outputParser",
+            "index": 0
+          },
+          {
+            "node": "Revizor",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase: Uložit FB draft": {
+      "main": [
+        []
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent - ANO_Článkomat",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent - ANO_Článkomat",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many - články ze dneška": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent - ANO_Článkomat",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Clankomat coallition vector store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clankomat coallition vector store": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent - ANO_Článkomat",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message and wait for response": {
+      "main": [
+        [
+          {
+            "node": "Je článek na revizi?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google search in SerpApi": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent - ANO_Článkomat",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get zpětnou vazbu na článek": {
+      "main": [
+        [
+          {
+            "node": "React with an emoji to a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Revizor",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "React with an emoji to a message": {
+      "main": [
+        [
+          {
+            "node": "Revizor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Revizor": {
+      "main": [
+        [
+          {
+            "node": "Send message and wait po revizi",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message and wait po revizi": {
+      "main": [
+        [
+          {
+            "node": "IF - Revidovaný článek",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Je článek na revizi?": {
+      "main": [
+        [
+          {
+            "node": "Originálná článek",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get zpětnou vazbu na článek",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF - Revidovaný článek": {
+      "main": [
+        [
+          {
+            "node": "Revidovaný článek",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get zpětnou vazbu na článek",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Revidovaný článek": {
+      "main": [
+        [
+          {
+            "node": "Supabase: Uložit FB draft",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Supabase: Uložit IG draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Originálná článek": {
+      "main": [
+        [
+          {
+            "node": "Supabase: Uložit FB draft",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Supabase: Uložit IG draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "60799d2f2a7adf1f111d797920ef2d06eaad1fd5afb0d66f02646eef5455b3ae"
+  }
+}
